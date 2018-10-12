@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>customAddImagery（有注记）</title>
+    <script src="../../build/Cesium/Cesium.js"></script>
+    <script src="../js/customAddImagery.js"></script>
+    <style>
+        @import url(../../build/Cesium/Widgets/widgets.css);
+        @import url(../css/main.css);
+    </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<script>
+    var viewer = new Cesium.Viewer('cesiumContainer',{
+        baseLayerPicker : true, // 关闭指定影像服务控件
+        imageryProviderViewModels : providerViewModels // 加载影像
+    });
+    viewer._cesiumWidget._creditContainer.style.display = "none"; // 去除水印
+
+    imageryLayers = viewer.imageryLayers;
+    imageryLayers.addImageryProvider(labelImagery); // 添加天地图中文注记
+</script>
+</body>
+</html>
