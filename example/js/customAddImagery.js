@@ -3,6 +3,7 @@
  * @type {Array}
  */
 var providerViewModels = [];
+var labelImagery;
 
 // ARCGIS地图
 var arcgisModel = new Cesium.ProviderViewModel({
@@ -45,7 +46,7 @@ var tdtModel = new Cesium.ProviderViewModel({
             tileMatrixSetID : 'c',
             credit : new Cesium.Credit('天地图全球影像服务'),
             subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7'],
-            maximumLevel : 15,
+            maximumLevel : 18,
             tilingScheme : new Cesium.GeographicTilingScheme(),
             tileMatrixLabels:['1','2','3','4','5','6','7']
         });
@@ -70,6 +71,20 @@ var tdtVectorModel = new Cesium.ProviderViewModel({
     }
 });
 providerViewModels.push(tdtVectorModel);
+
+/* 天地图影像注记URL */
+var ImageryNoteUrl = "http://t0.tianditu.com/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles";
+/* 天地图矢量注记URL */
+var VectorNoteUrl = "http://t0.tianditu.com/cva_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cva&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles";
+labelImagery =  new Cesium.WebMapTileServiceImageryProvider({
+        url: ImageryNoteUrl,
+        layer: "cia",
+        style: "default",
+        format: "tiles",
+        tileMatrixSetID: "w",
+        maximumLevel : 18,
+        show: false
+    });
 
 // MapBox
 var mapBoxModel = new Cesium.ProviderViewModel({
