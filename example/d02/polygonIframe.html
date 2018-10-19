@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>弹窗子页面</title>
+    <meta charset="utf-8">
+    <!-- 滑动插件css -->
+    <link rel="stylesheet" type="text/css" href="../css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <!-- 颜色选择器 -->
+    <script type="text/javascript" src="../js/jscolor.js"></script>
+    <!-- 滑动插件js -->
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+</head>
+<body>
+<div class="mp_tree" style="height: 452px;">
+    <div id="attr_style_view">
+        <div class="open">
+            <i class="tree_icon">-</i>样式信息
+        </div>
+        <div class="mp_attr">
+            <table id="talbe_style">
+                <tbody>
+                <tr>
+                    <td class="nametd">类型：</td>
+                    <td>面</td>
+                </tr>
+                <tr id="plot_attr_style_tr_fill">
+                    <td class="nametd">是否填充</td>
+                    <td>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_fill_1" value="1"
+                                   name="plot_attr_style_polygon_fill" checked="checked"> <label
+                                for="plot_attr_style_fill_1"> 是</label>
+                        </div>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_fill_2" value="2"
+                                   name="plot_attr_style_polygon_fill""=""> <label
+                                for="plot_attr_style_fill_2"> 否 </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="plot_attr_style_tr_color" style="display: table-row;">
+                    <td class="nametd">颜色</td>
+                    <td><input id="polygon_jscolor_fill_value" class="jscolor" value="3388ff"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_opacity" style="display: table-row;">
+                    <td class="nametd">透明度</td>
+                    <td><input class="easyui-slider" id="polygon_attr_style_opacity" value="60"
+                               data-options="showTip:true"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_outline">
+                    <td class="nametd">是否边框</td>
+                    <td>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_outline_1" value="1"
+                                   name="plot_attr_style_polygon_outline" checked="checked"> <label
+                                for="plot_attr_style_outline_1"> 是</label>
+                        </div>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_outline_2" value="2"
+                                   name="plot_attr_style_polygon_outline""=""> <label
+                                for="plot_attr_style_outline_2"> 否 </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="plot_attr_style_tr_outlineWidth">
+                    <td class="nametd">边框宽度</td>
+                    <td><input id="plot_attr_style_polygon_outlineWidth" type="number"
+                               value="7" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_outlineColor">
+                    <td class="nametd">边框颜色</td>
+                    <td><input id="polygon_jscolor_outline_value" class="jscolor" value="ffffff"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_outlineOpacity">
+                    <td class="nametd">边框透明度</td>
+                    <td><input class="easyui-slider" id="polygon_attr_style_outline_opacity" value="60"
+                               data-options="showTip:true"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

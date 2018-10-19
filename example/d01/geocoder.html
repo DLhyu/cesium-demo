@@ -1,0 +1,171 @@
+<!--
+    Custom GeoCode: baidumap POI Server(require方式加载js)
+-->
+<!DOCTYPE html>
+<head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>Geocoder</title>
+    <script type="text/javascript" src="../js/require.min.js" data-main="../js/main"></script>
+    <script type="text/javascript" src="../js/gps.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/getscript?v=1.4&amp;ak=&amp;services=true&amp;t=20170929031641"></script>
+    <style>
+        @import url(../../build/Cesium/Widgets/widgets.css);
+        @import url(../css/main.css);
+    </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div id="B_Map" style="display:none;"></div>
+<script>
+    function onload(Cesium) {
+
+        var url =  'http://{s}.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles';
+        var viewer = new Cesium.Viewer('cesiumContainer', {
+            imageryProvider : new Cesium.WebMapTileServiceImageryProvider({
+                url :url,
+                layer : 'img',
+                style : 'default',
+                format : 'tiles',
+                tileMatrixSetID : 'w',
+                credit : new Cesium.Credit('天地图全球影像服务'),
+                subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7'],
+                maximumLevel : 18
+            }),
+            baseLayerPicker : false,
+            animation : false, // 动画
+            timeline : false, // 时间线
+            navigationHelpButton : false, // 关闭帮助控件
+            fullscreenButton : false // 关闭全屏显示
+        });
+
+        viewer._cesiumWidget._creditContainer.style.display = "none"; // 去除水印
+        var imageryLayers = viewer.imageryLayers;
+        var url2 =  'http://{s}.tianditu.com/cia_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles';
+        var labelImagery = new Cesium.WebMapTileServiceImageryProvider({
+            url : url2,
+            layer : 'cia',
+            style : 'default',
+            format : 'tiles',
+            tileMatrixSetID : 'w',
+            credit : new Cesium.Credit('天地图全球影像中文注记服务'),
+            subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7']
+        });
+        imageryLayers.addImageryProvider(labelImagery);
+
+
+        function cancelGeocode(viewModel) {
+            viewModel._isSearchInProgress = false;
+            if (Cesium.defined(viewModel._geocodeInProgress)) {
+                viewModel._geocodeInProgress.cancel = true;
+                viewModel._geocodeInProgress = undefined;
+            }
+        }
+
+        function updateCamera(viewModel, destination) {
+            viewModel._scene.camera.flyTo({
+                destination : destination,
+                complete: function() {
+                    viewModel._complete.raiseEvent();
+                },
+                duration : viewModel._flightDuration,
+                endTransform : Cesium.Matrix4.IDENTITY
+            });
+        }
+
+        function geocode(viewModel) {
+            viewer.entities.removeAll();
+            var query = viewModel.searchText;
+
+            if (/^\s*$/.test(query)) {
+                //whitespace string
+                return;
+            }
+
+            // If the user entered (longitude, latitude, [height]) in degrees/meters,
+            // fly without calling the geocoder.
+            var splitQuery = query.match(/[^\s,\n]+/g);
+            if ((splitQuery.length === 2) || (splitQuery.length === 3)) {
+                var longitude = +splitQuery[0];
+                var latitude = +splitQuery[1];
+
+                var objBD = GPS.bd_decrypt(latitude,longitude); // 百度坐标系（BD09）转火星坐标系（GCJ02）
+                var obj = GPS.gcj_decrypt_exact(objBD.lat,objBD.lon); // 火星坐标系（GCJ02）转地球坐标系（WGS84）
+                var height = (splitQuery.length === 3) ? +splitQuery[2] : 100000.0;
+
+                if (!isNaN(longitude) && !isNaN(latitude) && !isNaN(height)) {
+                    updateCamera(viewModel, Cesium.Cartesian3.fromDegrees(obj.lon,obj.lat, height));
+                    viewer.entities.add({
+                        position : Cesium.Cartesian3
+                            .fromDegrees(obj.lon,obj.lat),
+                        billboard : {
+                            image : '../images/localpostion.png',
+                            scaleByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
+                            width : 20,
+                            height : 20
+                        }
+                        // name : "经度："+obj.lon.toFixed(4)+", "+"纬度："+obj.lat.toFixed(4)
+                    });
+                    return;
+                }
+            }else{
+                var map = new BMap.Map("B_Map");
+                var options = {
+                    onSearchComplete: function(results){
+                        // 判断状态是否正确
+                        if (local.getStatus() == BMAP_STATUS_SUCCESS){
+                            var resultslength = results.getCurrentNumPois()
+                            // var s = [];
+                            var nameVal,lng,lat;
+                            for (var i = 0; i < resultslength; i ++){
+                                // s.push(results.getPoi(i).title + ", " + results.getPoi(i).address);
+                                // console.log(results.getPoi(i).title+":"+results.getPoi(i).point.lng+","+results.getPoi(i).point.lat);
+                                lng = results.getPoi(i).point.lng;
+                                lat = results.getPoi(i).point.lat;
+                                nameVal = results.getPoi(i).title;
+                            }
+                            var objBD = GPS.bd_decrypt(lat,lng); // 百度坐标系（BD09）转火星坐标系（GCJ02）
+                            var obj = GPS.gcj_decrypt_exact(objBD.lat,objBD.lon); // 火星坐标系（GCJ02）转地球坐标系（WGS84）
+                            var heg = 100000.0;
+
+                            if (!isNaN(lng) && !isNaN(lat) && !isNaN(heg)) {
+                                updateCamera(viewModel, Cesium.Cartesian3.fromDegrees(obj.lon,obj.lat, heg));
+                                viewer.entities.add({
+                                    position : Cesium.Cartesian3
+                                        .fromDegrees(obj.lon,obj.lat),
+                                    billboard : {
+                                        image : '../images/localpostion.png',
+                                        scaleByDistance : new Cesium.NearFarScalar(1.5e2, 2.0, 1.5e7, 0.5),
+                                        width : 20,
+                                        height : 20
+                                    },
+                                    name : "地名",
+                                    description : nameVal
+                                });
+                                return;
+                            }
+                        }
+                    }
+                }
+                var local = new BMap.LocalSearch(map, options);
+                local.search(query);
+            }
+        }
+
+        var geocoder = viewer.geocoder.viewModel;
+        viewer.geocoder.viewModel.autoComplete = false; // 关闭搜索提示
+
+        geocoder._searchCommand = Cesium.createCommand(function() {
+            if (geocoder.isSearchInProgress) {
+                cancelGeocode(geocoder);
+            } else {
+                geocode(geocoder);
+            }
+        });
+    }
+</script>
+</body>

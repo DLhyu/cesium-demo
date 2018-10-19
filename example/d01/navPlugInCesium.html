@@ -7,9 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
-    <title>customAddImagery（有注记）</title>
+    <title>navPlugInCesium</title>
     <script src="../../build/Cesium/Cesium.js"></script>
     <script src="../js/customAddImagery.js"></script>
+    <script src="../js/viewerCesiumNavigationMixin.min.js"></script>
     <style>
         @import url(../../build/Cesium/Widgets/widgets.css);
         @import url(../css/main.css);
@@ -19,13 +20,35 @@
 <div id="cesiumContainer"></div>
 <script>
     var viewer = new Cesium.Viewer('cesiumContainer',{
+        animation : false, // 动画
+        timeline : false, // 时间线
         baseLayerPicker : true, // 关闭指定影像服务控件
-        imageryProviderViewModels : providerViewModels // 加载影像
+        imageryProviderViewModels : providerViewModels, // 加载影像
+        navigationHelpButton : false, // 关闭帮助控件
+        homeButton : false, // 关闭Home控件
+        fullscreenButton : false, // 关闭全屏显示
+        geocoder : false, // 关闭搜索控件
     });
     viewer._cesiumWidget._creditContainer.style.display = "none"; // 去除水印
 
     imageryLayers = viewer.imageryLayers;
     imageryLayers.addImageryProvider(labelImagery); // 添加天地图中文注记
+    // 扩展插件
+    viewer.extend(Cesium.viewerCesiumNavigationMixin, {
+        defaultResetView : Cesium.Cartographic.fromCartesian(Cesium.Cartesian3
+            .fromDegrees(110, 32, 15000000.1))
+        // 重置视图
+    });
+    // 默认初始化视图
+    viewer.camera.flyTo({
+        destination : Cesium.Cartesian3.fromDegrees(110, 32, 15000000.1),
+        duration : 5, // 旋转速度 数值越大越慢
+        orientation : { // 朝北向下俯视
+            heading : 0.0,
+            pitch : -Cesium.Math.PI_OVER_TWO, // 相机间距
+            roll : 0.0  // 相机滚动
+        }
+    });
 </script>
 </body>
 </html>

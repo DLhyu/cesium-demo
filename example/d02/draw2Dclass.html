@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>draw2Dclass</title>
+    <script src="../js/require.min.js" data-main="../js/main"></script>
+    <style>
+        @import url(../../build/Cesium/Widgets/widgets.css);
+        @import url(../css/main.css);
+    </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div class="left_iframe_wrapper">
+    <iframe id="left_container_iframe" name="left_container_iframe" scrolling="yes" style="border: none;"></iframe>
+</div>
+<div style="position: absolute; float: left; left: 10px;top: 10px; z-index: 999;">
+    <input id="DrawPoint" type="button" value="绘制点" class="cesium-button">
+    <input id="DrawPolyline" type="button" value="绘制线(双击结束绘制)" class="cesium-button">
+    <input id="DrawPolygon" type="button" value="绘制面(双击结束绘制)" class="cesium-button">
+    <!--<input id="Draw3DPolygon" type="button" value="绘制三维面(双击结束绘制)" class="cesium-button">-->
+    <!--<label>高度: </label>-->
+    <!--<input type="text" value="500" id="polygons3d-height-size" style="width:60px;"/><label>(米)</label>-->
+    <!--<input id="DrawWall" type="button" value="绘制墙(双击结束绘制)" class="cesium-button">-->
+    <!--<label>墙高: </label>-->
+    <!--<input type="text" value="500" id="wall-height-size" style="width:60px;"/><label>(米)</label>-->
+    <!--<input id="clearAllDraw" type="button" value="清除" class="cesium-button">-->
+</div>
+<script>
+    var viewer;
+    function onload(Cesium) {
+
+        var url = 'http://{s}.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles';
+        viewer = new Cesium.Viewer('cesiumContainer', {
+            imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
+                url: url,
+                layer: 'img',
+                style: 'default',
+                format: 'tiles',
+                tileMatrixSetID: 'w',
+                credit: new Cesium.Credit('天地图全球影像服务'),
+                subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
+                maximumLevel: 18
+            }),
+            baseLayerPicker: false,
+            animation: false, // 动画
+            timeline: false, // 时间线
+            navigationHelpButton: false, // 关闭帮助控件
+            fullscreenButton: false, // 关闭全屏显示
+            geocoder : false // 关闭搜索控件
+        });
+
+        viewer._cesiumWidget._creditContainer.style.display = "none"; // 去除水印
+        var imageryLayers = viewer.imageryLayers;
+        var url2 = 'http://{s}.tianditu.com/cia_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles';
+        var labelImagery = new Cesium.WebMapTileServiceImageryProvider({
+            url: url2,
+            layer: 'cia',
+            style: 'default',
+            format: 'tiles',
+            tileMatrixSetID: 'w',
+            credit: new Cesium.Credit('天地图全球影像中文注记服务'),
+            subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
+        });
+        imageryLayers.addImageryProvider(labelImagery);
+
+        // 初始位置
+        viewer.camera.setView({
+            destination : Cesium.Cartesian3.fromDegrees(112.52133465950095, 23.071194052564465, 1063.5910571697082),
+            orientation : {
+                heading : 0.9183320934226114,
+                pitch : -0.2851308873567558,
+                roll : 0.00200137740773787
+            }
+        });
+
+        // 调用绘制二维类的函数
+        document.getElementById('DrawPoint').onclick = function () {
+            clearAll();
+            require([ 'draw2Dpoint' ], function(point) {
+                point.drawPoint();
+            }); // 点
+        };
+
+        document.getElementById('DrawPolyline').onclick = function () {
+            clearAll();
+            require([ 'draw2Dpolyline' ], function(polyline) {
+                polyline.drawLine();
+            }); // 线
+        };
+
+        document.getElementById('DrawPolygon').onclick = function () {
+            clearAll();
+            require([ 'draw2Dpolygon' ], function(polygon) {
+                polygon.drawPolygon();
+            }); // 面
+        };
+
+        // 清除
+        document.getElementById('clearAllDraw').onclick = function () {
+            clearAll();
+        };
+        
+        function clearAll() {
+            viewer.entities.removeAll();
+            var obj = window.frames["left_container_iframe"];
+            obj.document.body.innerHTML = "";//html为你想要的内容
+        }
+    }
+</script>
+</body>

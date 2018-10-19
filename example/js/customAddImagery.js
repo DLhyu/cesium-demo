@@ -39,16 +39,14 @@ var tdtModel = new Cesium.ProviderViewModel({
     tooltip : 'TianDiTu Provider',
     creationFunction : function() {
         return new Cesium.WebMapTileServiceImageryProvider({
-            url : 'http://t0.tianditu.com/img_c/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+            url : 'http://t0.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
             layer : 'img',
             style : 'default',
             format : 'tiles',
-            tileMatrixSetID : 'c',
+            tileMatrixSetID : 'w',
             credit : new Cesium.Credit('天地图全球影像服务'),
             subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7'],
-            maximumLevel : 18,
-            tilingScheme : new Cesium.GeographicTilingScheme(),
-            tileMatrixLabels:['1','2','3','4','5','6','7']
+            maximumLevel : 18
         });
     }
 });
@@ -66,6 +64,7 @@ var tdtVectorModel = new Cesium.ProviderViewModel({
             format : 'tiles',
             tileMatrixSetID : 'w',
             credit : new Cesium.Credit('天地图全球矢量地图服务'),
+            subdomains : ['t0','t1','t2','t3','t4','t5','t6','t7'],
             maximumLevel : 18
         });
     }

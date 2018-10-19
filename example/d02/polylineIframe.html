@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>弹窗子页面</title>
+    <meta charset="utf-8">
+    <!-- 滑动插件css -->
+    <link rel="stylesheet" type="text/css" href="../css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <!-- 颜色选择器 -->
+    <script type="text/javascript" src="../js/jscolor.js"></script>
+    <!-- 滑动插件js -->
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+</head>
+<body>
+<div class="mp_tree" style="height: 452px;">
+    <div id="attr_style_view">
+        <div class="open">
+            <i class="tree_icon">-</i>样式信息
+        </div>
+        <div class="mp_attr">
+            <table id="talbe_style">
+                <tbody>
+                <tr>
+                    <td class="nametd">类型：</td>
+                    <td>线</td>
+                </tr>
+                <tr id="plot_attr_style_tr_lineType">
+                    <td class="nametd">线型</td>
+                    <td><select id="plot_attr_style_lineType" class="mp_select"
+                                data-value="solid" style="display: none;"><option
+                            value="solid">实线</option>
+                        <option value="dash">虚线</option>
+                        <option value="glow">光晕</option>
+                        <option value="arrow">箭头</option></select>
+                        <div class="mp_select">
+                            <div class="mp_select_text">实线</div>
+                        </div></td>
+                </tr>
+                <tr id="plot_attr_style_tr_color">
+                    <td class="nametd">颜色</td>
+                    <td><input id="line_jscolor_fill_value" class="jscolor" value="3388ff"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_width">
+                    <td class="nametd">线宽</td>
+                    <td><input id="plot_attr_style_line_width" type="number"
+                               value="4" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_clampToGround">
+                    <td class="nametd">是否贴地</td>
+                    <td>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_clampToGround_1"
+                                   value="1" name="plot_attr_style_line_clampToGround"> <label
+                                for="plot_attr_style_clampToGround_1"> 是</label>
+                        </div>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_clampToGround_2"
+                                   value="2" name="plot_attr_style_line_clampToGround"
+                                   checked="checked""=""> <label
+                                for="plot_attr_style_clampToGround_2"> 否 </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="plot_attr_style_tr_outline">
+                    <td class="nametd">是否边框</td>
+                    <td>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_outline_1" value="1"
+                                   name="plot_attr_style_outline_line" checked="checked"> <label
+                                for="plot_attr_style_outline_1"> 是</label>
+                        </div>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_outline_2" value="2"
+                                   name="plot_attr_style_outline_line"> <label
+                                for="plot_attr_style_outline_2"> 否 </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="plot_attr_style_tr_outline_width">
+                    <td class="nametd">边框宽度</td>
+                    <td><input id="plot_attr_style_outline_width" type="number"
+                               value="2" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_color">
+                    <td class="nametd">边框颜色</td>
+                    <td><input id="jscolor_line_outline_value" class="jscolor" value="ffffff"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_opacity">
+                    <td class="nametd">透明度</td>
+                    <td><input class="easyui-slider" id="line_attr_style_opacity" value="100"
+                               data-options="showTip:true"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

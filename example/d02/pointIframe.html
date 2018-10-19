@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>弹窗子页面</title>
+    <meta charset="utf-8">
+    <!-- 滑动插件css -->
+    <link rel="stylesheet" type="text/css" href="../css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <!-- 颜色选择器 -->
+    <script type="text/javascript" src="../js/jscolor.js"></script>
+    <!-- 滑动插件js -->
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+</head>
+<body>
+<div class="mp_tree" style="height: 452px;">
+    <div id="attr_style_view">
+        <div class="open">
+            <i class="tree_icon">-</i>样式信息
+        </div>
+        <div class="mp_attr">
+            <table id="talbe_style">
+                <tbody>
+                <tr>
+                    <td class="nametd">类型：</td>
+                    <td>像素点</td>
+                </tr>
+                <tr id="plot_attr_style_tr_pixelSize">
+                    <td class="nametd">像素大小</td>
+                    <td><input id="plot_attr_style_pixelSize" type="number"
+                               value="10" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_color">
+                    <td class="nametd">颜色</td>
+                    <td><input id="point_jscolor_fill_value" class="jscolor" value="00ff00"></td>
+                </tr>
+                <!--<tr id="plot_attr_style_tr_opacity">-->
+                    <!--<td class="nametd">透明度</td>-->
+                    <!--<td><input class="easyui-slider" id="point_fill_opacity" value="100"-->
+                               <!--data-options="showTip:true"></td>-->
+                <!--</tr>-->
+                <!--<tr id="plot_attr_style_tr_outline">-->
+                    <!--<td class="nametd">是否边框</td>-->
+                    <!--<td>-->
+                        <!--<div class="radio radio-info radio-inline">-->
+                            <!--<input type="radio" id="plot_attr_style_outline_1" value="1"-->
+                                   <!--name="plot_attr_style_outline" checked="checked"> <label-->
+                                <!--for="plot_attr_style_outline_1"> 是</label>-->
+                        <!--</div>-->
+                        <!--<div class="radio radio-info radio-inline">-->
+                            <!--<input type="radio" id="plot_attr_style_outline_2" value="2"-->
+                                   <!--name="plot_attr_style_outline""=""> <label-->
+                                <!--for="plot_attr_style_outline_2"> 否 </label>-->
+                        <!--</div>-->
+                    <!--</td>-->
+                <!--</tr>-->
+                <tr id="plot_attr_style_tr_outlineColor">
+                    <td class="nametd">边框颜色</td>
+                    <td><input id="point_jscolor_outline_value" class="jscolor" value="ffffff"></td>
+                </tr>
+                <!--<tr id="plot_attr_style_tr_outlineOpacity">-->
+                    <!--<td class="nametd">边框透明度</td>-->
+                    <!--<td><input class="easyui-slider" id="point_outline_opacity" value="50"-->
+                               <!--data-options="showTip:true"></td>-->
+                <!--</tr>-->
+                <tr id="plot_attr_style_tr_outlineWidth">
+                    <td class="nametd">边框宽度</td>
+                    <td><input id="plot_attr_style_outlineWidth" type="number"
+                               value="2" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_scaleByDistance">
+                    <td class="nametd">是否按视距缩放</td>
+                    <td>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_scaleByDistance_1"
+                                   value="1" name="plot_attr_style_scaleByDistance"> <label
+                                for="plot_attr_style_scaleByDistance_1"> 是</label>
+                        </div>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_scaleByDistance_2"
+                                   value="2" name="plot_attr_style_scaleByDistance"
+                                   checked="checked""=""> <label
+                                for="plot_attr_style_scaleByDistance_2"> 否 </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="plot_attr_style_tr_scaleByDistance_far"
+                    style="display: none;">
+                    <td class="nametd">上限</td>
+                    <td><input id="plot_attr_style_scaleByDistance_far"
+                               type="number" value="1000000" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_scaleByDistance_farValue"
+                    style="display: none;">
+                    <td class="nametd">比例值</td>
+                    <td><input id="plot_attr_style_scaleByDistance_farValue"
+                               type="number" value="0.1" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_scaleByDistance_near"
+                    style="display: none;">
+                    <td class="nametd">下限</td>
+                    <td><input id="plot_attr_style_scaleByDistance_near"
+                               type="number" value="1000" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_scaleByDistance_nearValue"
+                    style="display: none;">
+                    <td class="nametd">比例值</td>
+                    <td><input id="plot_attr_style_scaleByDistance_nearValue"
+                               type="number" value="1" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_distanceDisplayCondition">
+                    <td class="nametd">是否按视距显示</td>
+                    <td>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio"
+                                   id="plot_attr_style_distanceDisplayCondition_1" value="1"
+                                   name="plot_attr_style_distanceDisplayCondition"> <label
+                                for="plot_attr_style_distanceDisplayCondition_1"> 是</label>
+                        </div>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio"
+                                   id="plot_attr_style_distanceDisplayCondition_2" value="2"
+                                   name="plot_attr_style_distanceDisplayCondition"
+                                   checked="checked""=""> <label
+                                for="plot_attr_style_distanceDisplayCondition_2"> 否 </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="plot_attr_style_tr_distanceDisplayCondition_far"
+                    style="display: none;">
+                    <td class="nametd">最大距离</td>
+                    <td><input id="plot_attr_style_distanceDisplayCondition_far"
+                               type="number" value="10000" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_distanceDisplayCondition_near"
+                    style="display: none;">
+                    <td class="nametd">最小距离</td>
+                    <td><input
+                            id="plot_attr_style_distanceDisplayCondition_near" type="number"
+                            value="0" class="mp_input"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--<div class="bdt">-->
+        <!--<div class="open">-->
+            <!--<i class="tree_icon">-</i>属性信息-->
+        <!--</div>-->
+        <!--<div class="mp_attr">-->
+            <!--<table id="talbe_attr">-->
+                <!--<tbody>-->
+                <!--<tr id="plot_attr_attr_tr_name">-->
+                    <!--<td class="nametd">名称</td>-->
+                    <!--<td><input id="plot_attr_attr_name" type="text" value=""-->
+                               <!--class="mp_input"></td>-->
+                <!--</tr>-->
+                <!--<tr id="plot_attr_attr_tr_remark">-->
+                    <!--<td class="nametd">备注</td>-->
+                    <!--<td><textarea id="plot_attr_attr_remark" class="mp_input"-->
+                                  <!--style="height: 50px; resize: none;"></textarea></td>-->
+                <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div style="margin-top: 10px; text-align: center">-->
+        <!--<button id="btnDelete" type="button" class="btn btn-danger">删除</button>-->
+    <!--</div>-->
+</div>
+</body>
+</html>
