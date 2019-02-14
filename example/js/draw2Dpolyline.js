@@ -1,4 +1,4 @@
-define(['jquery'], () => ({
+define(['jquery','commons'], () => ({
     // 绘制线
     drawLine: function () {
         var isDrawPolyline = true;
@@ -6,9 +6,9 @@ define(['jquery'], () => ({
         var colorAlphaChange = function () {
             var colorStr = $("#left_container_iframe").contents().find("#line_jscolor_fill_value").val();
             colorStr = "#" + colorStr;
-            // var opacityVal = $("#left_container_iframe").contents().find("#line_attr_style_opacity").val();
-            // opacityVal = opacityVal/100;
-            return Cesium.Color.fromCssColorString(colorStr);
+            var opacityVal = $("#left_container_iframe").contents().find("#line_attr_style_opacity").val();
+            opacityVal = opacityVal/100;
+            return Cesium.Color.fromCssColorString(colorRgb(colorStr, opacityVal));
         }
         var lineWidthChange = function () {
             var lineWidth = $("#left_container_iframe").contents().find("#plot_attr_style_line_width").val();

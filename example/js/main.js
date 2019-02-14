@@ -8,7 +8,10 @@ if (!developMode) {
             'jquery': '../js/jquery-3.3.1.min',
             'draw2Dpoint': '../js/draw2Dpoint',
             'draw2Dpolyline': '../js/draw2Dpolyline',
-            'draw2Dpolygon': '../js/draw2Dpolygon'
+            'draw2Dpolygon': '../js/draw2Dpolygon',
+            'draw2Dlabel': '../js/draw2Dlabel',
+            'draw2Dicon': '../js/draw2Dicon',
+            'commons': '../js/commons'
         },
         shim: {
             Cesium: {

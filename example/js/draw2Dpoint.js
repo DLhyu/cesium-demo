@@ -1,4 +1,4 @@
-define(['jquery'], () => ({
+define(['jquery','commons'], () => ({
     // 绘制点
     drawPoint: function () {
         var isDrawPoint = true;
@@ -22,20 +22,29 @@ define(['jquery'], () => ({
             var colorAlphaChange = function () {
                 var colorStr = $("#left_container_iframe").contents().find("#point_jscolor_fill_value").val();
                 colorStr = "#" + colorStr;
-                // var opacityVal = $("#left_container_iframe").contents().find("#point_fill_opacity").val();
-                // opacityVal = opacityVal/100;
-                return Cesium.Color.fromCssColorString(colorStr);
+                var opacityVal = $("#left_container_iframe").contents().find("#point_fill_opacity").val();
+                opacityVal = opacityVal/100;
+                return Cesium.Color.fromCssColorString(colorRgb(colorStr, opacityVal));
             }
             var outlineWidthChange = function () {
-                var outlineWidthVal = $("#left_container_iframe").contents().find("#plot_attr_style_outlineWidth").val();
-                if (outlineWidthVal >= 0) {
-                    return outlineWidthVal;
+                var radioVal = $("#left_container_iframe").contents().find('input:radio[name="plot_attr_style_outline"]:checked').val();
+                if (radioVal == 1) {
+                    var outlineWidth = $("#left_container_iframe").contents().find("#plot_attr_style_outlineWidth").val();
+                    return outlineWidth;
+                } else {
+                    return 0;
                 }
+                // var outlineWidthVal = $("#left_container_iframe").contents().find("#plot_attr_style_outlineWidth").val();
+                // if (outlineWidthVal >= 0) {
+                //     return outlineWidthVal;
+                // }
             }
             var outlineColorChange = function () {
                 var colorStr = $("#left_container_iframe").contents().find("#point_jscolor_outline_value").val();
                 colorStr = "#" + colorStr;
-                return Cesium.Color.fromCssColorString(colorStr);
+                var opacityVal = $("#left_container_iframe").contents().find("#point_outline_opacity").val();
+                opacityVal = opacityVal/100;
+                return Cesium.Color.fromCssColorString(colorRgb(colorStr, opacityVal));
             }
             var scaleByDistanceChange = function () {
                 var radioVal = $("#left_container_iframe").contents().find('input:radio[name="plot_attr_style_scaleByDistance"]:checked').val();

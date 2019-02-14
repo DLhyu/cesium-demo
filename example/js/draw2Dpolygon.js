@@ -1,4 +1,4 @@
-define(['jquery'], () => ({
+define(['jquery','commons'], () => ({
     // 绘制面
     drawPolygon : function (){
         var isDrawPolygon = true;
@@ -6,22 +6,29 @@ define(['jquery'], () => ({
         var fillChange = function () {
             var radioVal = $("#left_container_iframe").contents().find('input:radio[name="plot_attr_style_polygon_fill"]:checked').val();
             if (radioVal == 1) {
-                var colorStr = $("#left_container_iframe").contents().find("#polygon_jscolor_fill_value").val();
-                colorStr = "#" + colorStr;
-                var opacityVal = $("#left_container_iframe").contents().find("#polygon_attr_style_opacity").val();
-                opacityVal = opacityVal/100;
-                viewer.entities.getById('polygon').polygon.material = Cesium.Color.fromCssColorString(colorStr).withAlpha(opacityVal);
+                // var colorStr = $("#left_container_iframe").contents().find("#polygon_jscolor_fill_value").val();
+                // colorStr = "#" + colorStr;
+                // var opacityVal = $("#left_container_iframe").contents().find("#polygon_attr_style_opacity").val();
+                // opacityVal = opacityVal/100;
+                // viewer.entities.getById('polygon').polygon.material = Cesium.Color.fromCssColorString(colorStr).withAlpha(opacityVal);
                 return true;
             } else {
                 return false;
             }
+        }
+        var materialChange = function () {
+            var colorStr = $("#left_container_iframe").contents().find("#polygon_jscolor_fill_value").val();
+            colorStr = "#" + colorStr;
+            var opacityVal = $("#left_container_iframe").contents().find("#polygon_attr_style_opacity").val();
+            opacityVal = opacityVal/100;
+            return Cesium.Color.fromCssColorString(colorRgb(colorStr, opacityVal));
         }
         var colorAlphaChange = function () {
             var colorStr = $("#left_container_iframe").contents().find("#polygon_jscolor_outline_value").val();
             colorStr = "#" + colorStr;
             var opacityVal = $("#left_container_iframe").contents().find("#polygon_attr_style_outline_opacity").val();
             opacityVal = opacityVal/100;
-            return Cesium.Color.fromCssColorString(colorStr).withAlpha(opacityVal);
+            return Cesium.Color.fromCssColorString(colorRgb(colorStr, opacityVal));
         }
         var outlineChange = function () {
             var radioVal = $("#left_container_iframe").contents().find('input:radio[name="plot_attr_style_polygon_outline"]:checked').val();
@@ -49,10 +56,13 @@ define(['jquery'], () => ({
                         show : true,
                         fill : true,
                         hierarchy : undefined,
-                        material : Cesium.Color.fromCssColorString('#3388ff').withAlpha(0.5),
+                        material : new Cesium.GridMaterialProperty({
+                            color : Cesium.Color.fromCssColorString('#3388ff').withAlpha(0.6)
+                        }),
+                        height : 0,
                         outline : true,
                         outlineColor : Cesium.Color.fromCssColorString('#ffffff'),
-                        outlineWidth : 7
+                        outlineWidth : 4
                     }
                 };
                 this.path = positons;
@@ -125,7 +135,7 @@ define(['jquery'], () => ({
         function changeProperty(id) {
             var polygonID = viewer.entities.getById(id);
             polygonID.polygon.fill = new Cesium.CallbackProperty(fillChange, false);
-            // polygonID.polygon.material = new Cesium.CallbackProperty(colorAlphaChange, false);
+            // polygonID.polygon.material = new Cesium.CallbackProperty(materialChange, false);
             polygonID.polygon.outline = new Cesium.CallbackProperty(outlineChange, false);
             polygonID.polygon.outlineWidth = new Cesium.CallbackProperty(outlineWidthChange, false);
             polygonID.polygon.outlineColor = new Cesium.CallbackProperty(colorAlphaChange, false);

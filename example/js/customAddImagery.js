@@ -39,7 +39,7 @@ var tdtModel = new Cesium.ProviderViewModel({
     tooltip : 'TianDiTu Provider',
     creationFunction : function() {
         return new Cesium.WebMapTileServiceImageryProvider({
-            url : 'http://t0.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+            url : 'http://t0.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801',
             layer : 'img',
             style : 'default',
             format : 'tiles',
@@ -58,7 +58,7 @@ var tdtVectorModel = new Cesium.ProviderViewModel({
     tooltip : 'TianDiTu Provider',
     creationFunction : function() {
         return new Cesium.WebMapTileServiceImageryProvider({
-            url : 'http://t0.tianditu.com/vec_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=vec&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles',
+            url : 'http://t0.tianditu.com/vec_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=vec&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801',
             layer : 'vec',
             style : 'default',
             format : 'tiles',
@@ -72,9 +72,9 @@ var tdtVectorModel = new Cesium.ProviderViewModel({
 providerViewModels.push(tdtVectorModel);
 
 /* 天地图影像注记URL */
-var ImageryNoteUrl = "http://t0.tianditu.com/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles";
+var ImageryNoteUrl = "http://t0.tianditu.com/cia_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cia&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801";
 /* 天地图矢量注记URL */
-var VectorNoteUrl = "http://t0.tianditu.com/cva_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cva&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles";
+var VectorNoteUrl = "http://t0.tianditu.com/cva_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=cva&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801";
 labelImagery =  new Cesium.WebMapTileServiceImageryProvider({
         url: ImageryNoteUrl,
         layer: "cia",
