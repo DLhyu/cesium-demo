@@ -23,19 +23,21 @@
     <input id="DrawPoint" type="button" value="绘制点" class="cesium-button">
     <input id="DrawPolyline" type="button" value="绘制线(双击结束绘制)" class="cesium-button">
     <input id="DrawPolygon" type="button" value="绘制面(双击结束绘制)" class="cesium-button">
+    <input id="DrawLabel" type="button" value="文字" class="cesium-button">
+    <input id="DrawIcon" type="button" value="标记点" class="cesium-button">
     <!--<input id="Draw3DPolygon" type="button" value="绘制三维面(双击结束绘制)" class="cesium-button">-->
     <!--<label>高度: </label>-->
     <!--<input type="text" value="500" id="polygons3d-height-size" style="width:60px;"/><label>(米)</label>-->
     <!--<input id="DrawWall" type="button" value="绘制墙(双击结束绘制)" class="cesium-button">-->
     <!--<label>墙高: </label>-->
     <!--<input type="text" value="500" id="wall-height-size" style="width:60px;"/><label>(米)</label>-->
-    <!--<input id="clearAllDraw" type="button" value="清除" class="cesium-button">-->
+    <input id="clearAllDraw" type="button" value="清除" class="cesium-button">
 </div>
 <script>
     var viewer;
     function onload(Cesium) {
 
-        var url = 'http://{s}.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles';
+        var url = 'http://{s}.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801';
         viewer = new Cesium.Viewer('cesiumContainer', {
             imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
                 url: url,
@@ -57,7 +59,8 @@
 
         viewer._cesiumWidget._creditContainer.style.display = "none"; // 去除水印
         var imageryLayers = viewer.imageryLayers;
-        var url2 = 'http://{s}.tianditu.com/cia_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles';
+
+        var url2 = 'http://{s}.tianditu.com/cia_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801';
         var labelImagery = new Cesium.WebMapTileServiceImageryProvider({
             url: url2,
             layer: 'cia',
@@ -68,6 +71,13 @@
             subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
         });
         imageryLayers.addImageryProvider(labelImagery);
+
+        // var url2 = 'http://192.168.1.159:8089/geoserver/gc/wms';
+        // var provider = new Cesium.WebMapServiceImageryProvider({
+        //     url: url2,
+        //     layers: 'gc:data'
+        // });
+        // imageryLayers.addImageryProvider(provider);
 
         // 初始位置
         viewer.camera.setView({
@@ -99,6 +109,20 @@
             require([ 'draw2Dpolygon' ], function(polygon) {
                 polygon.drawPolygon();
             }); // 面
+        };
+
+        document.getElementById('DrawLabel').onclick = function () {
+            clearAll();
+            require([ 'draw2Dlabel' ], function(label) {
+                label.drawLabel();
+            }); // 文字
+        };
+
+        document.getElementById('DrawIcon').onclick = function () {
+            clearAll();
+            require([ 'draw2Dicon' ], function(icon) {
+                icon.drawIcon();
+            }); // 标记点
         };
 
         // 清除

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <title>弹窗子页面</title>
+    <meta charset="utf-8">
+    <!-- 滑动插件css -->
+    <link rel="stylesheet" type="text/css" href="../css/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="../css/themes/icon.css">
+    <script type="text/javascript" src="../js/jquery.js"></script>
+    <!-- 颜色选择器 -->
+    <!--<script type="text/javascript" src="../js/jscolor.js"></script>-->
+    <!-- 滑动插件js -->
+    <script type="text/javascript" src="../js/jquery.easyui.min.js"></script>
+</head>
+<body>
+<div class="mp_tree" style="height: 452px;">
+    <div id="attr_style_view">
+        <div class="open">
+            <i class="tree_icon">-</i>样式信息
+        </div>
+        <div class="mp_attr">
+            <table id="talbe_style">
+                <tbody>
+                <tr>
+                    <td class="nametd">类型：</td>
+                    <td>图标点标记</td>
+                </tr>
+                <tr id="plot_attr_style_tr_image">
+                    <td class="nametd">图标</td>
+                    <td>images/marker/mark1.png</td>
+                </tr>
+                <tr id="plot_attr_style_tr_opacity">
+                    <td class="nametd">透明度</td>
+                    <td><input class="easyui-slider" id="icon_attr_style_opacity" value="100"
+                               data-options="showTip:true"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_scale">
+                    <td class="nametd">大小比例</td>
+                    <td><input id="plot_attr_style_scale" type="number"
+                               value="1" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_rotation">
+                    <td class="nametd">旋转角度</td>
+                    <td><input id="plot_attr_style_rotation" type="number"
+                               value="0" class="mp_input"></td>
+                </tr>
+                <tr id="plot_attr_style_tr_scaleByDistance">
+                    <td class="nametd">是否按视距缩放</td>
+                    <td>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_scaleByDistance_1"
+                                   value="1" name="plot_attr_style_scaleByDistance"> <label
+                                for="plot_attr_style_scaleByDistance_1"> 是</label>
+                        </div>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio" id="plot_attr_style_scaleByDistance_2"
+                                   value="2" name="plot_attr_style_scaleByDistance"
+                                   checked="checked""=""> <label
+                                for="plot_attr_style_scaleByDistance_2"> 否 </label>
+                        </div>
+                    </td>
+                </tr>
+                <tr id="plot_attr_style_tr_distanceDisplayCondition">
+                    <td class="nametd">是否按视距显示</td>
+                    <td>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio"
+                                   id="plot_attr_style_distanceDisplayCondition_1" value="1"
+                                   name="plot_attr_style_distanceDisplayCondition"> <label
+                                for="plot_attr_style_distanceDisplayCondition_1"> 是</label>
+                        </div>
+                        <div class="radio radio-info radio-inline">
+                            <input type="radio"
+                                   id="plot_attr_style_distanceDisplayCondition_2" value="2"
+                                   name="plot_attr_style_distanceDisplayCondition"
+                                   checked="checked""=""> <label
+                                for="plot_attr_style_distanceDisplayCondition_2"> 否 </label>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
