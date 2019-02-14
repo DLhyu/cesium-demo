@@ -24,7 +24,7 @@
 <script>
     function onload(Cesium) {
 
-        var url =  'http://{s}.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles';
+        var url =  'http://{s}.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801';
         var viewer = new Cesium.Viewer('cesiumContainer', {
             imageryProvider : new Cesium.WebMapTileServiceImageryProvider({
                 url :url,
@@ -45,7 +45,7 @@
 
         viewer._cesiumWidget._creditContainer.style.display = "none"; // 去除水印
         var imageryLayers = viewer.imageryLayers;
-        var url2 =  'http://{s}.tianditu.com/cia_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles';
+        var url2 =  'http://{s}.tianditu.com/cia_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801';
         var labelImagery = new Cesium.WebMapTileServiceImageryProvider({
             url : url2,
             layer : 'cia',
