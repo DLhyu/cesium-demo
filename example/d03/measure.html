@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>measure</title>
+    <!--<script src="../js/jquery-3.3.1.min.js"></script>-->
+    <script src="../js/require.min.js" data-main="../js/main"></script>
+    <style>
+        @import url(../../build/Cesium/Widgets/widgets.css);
+        @import url(../css/main.css);
+    </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<div id="ToolTip" style="font-size: 10px;z-index: 999; position: absolute; color: #ffffff; display: none"></div>
+<div style="position: absolute; float: left;left: 10px;top: 10px; z-index: 999;">
+    <input id="Distance" type="button" value="测距" class="cesium-button">
+    <span id="GroundMea"><input type="checkbox" id="CheckMea" />
+        <input type="button" value="贴地" /></span><br/>
+    <input id="Area" type="button" value="量面" class="cesium-button">
+    <input id="clearMea" type="button" value="清除" class="cesium-button"><br/>
+</div>
+<script>
+    var viewer;
+    function onload(Cesium) {
+
+        var url = 'http://{s}.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801';
+        viewer = new Cesium.Viewer('cesiumContainer', {
+            imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
+                url: url,
+                layer: 'img',
+                style: 'default',
+                format: 'tiles',
+                tileMatrixSetID: 'w',
+                credit: new Cesium.Credit('天地图全球影像服务'),
+                subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
+                maximumLevel: 18
+            }),
+            baseLayerPicker: false,
+            animation: false, // 动画
+            timeline: false, // 时间线
+            navigationHelpButton: false, // 关闭帮助控件
+            fullscreenButton: false, // 关闭全屏显示
+            geocoder : false // 关闭搜索控件
+        });
+
+        viewer._cesiumWidget._creditContainer.style.display = "none"; // 去除水印
+        var imageryLayers = viewer.imageryLayers;
+
+        var url2 = 'http://{s}.tianditu.com/cia_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801';
+        var labelImagery = new Cesium.WebMapTileServiceImageryProvider({
+            url: url2,
+            layer: 'cia',
+            style: 'default',
+            format: 'tiles',
+            tileMatrixSetID: 'w',
+            credit: new Cesium.Credit('天地图全球影像中文注记服务'),
+            subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
+        });
+        imageryLayers.addImageryProvider(labelImagery);
+
+        // 初始位置
+        viewer.camera.setView({
+            destination : Cesium.Cartesian3.fromDegrees(112.52133465950095, 23.071194052564465, 1063.5910571697082),
+            orientation : {
+                heading : 0.9183320934226114,
+                pitch : -0.2851308873567558,
+                roll : 0.00200137740773787
+            }
+        });
+
+        // 调用量测函数
+        document.getElementById('Distance').onclick = function () {
+            viewer.entities.removeAll();
+            require([ 'meaDistance' ], function(distance) {
+                distance.meaDistance();
+            }); // 测距
+        };
+
+        document.getElementById('Area').onclick = function () {
+            viewer.entities.removeAll();
+            require([ 'meaArea' ], function(area) {
+                area.meaArea();
+            }); // 测面
+        };
+
+        // 清除
+        document.getElementById('clearMea').onclick = function () {
+            viewer.entities.removeAll();
+        };
+
+    }
+</script>
+</body>
