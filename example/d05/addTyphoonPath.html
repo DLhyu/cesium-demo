@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Use correct character set. -->
+    <meta charset="utf-8">
+    <!-- Tell IE to use the latest, best version. -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Make the application on mobile take up the full browser screen and disable user scaling. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title>typhoon path</title>
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/require.min.js" data-main="../js/main"></script>
+    <style>
+        @import url(../../build/Cesium/Widgets/widgets.css);
+        @import url(../css/main.css);
+    </style>
+</head>
+<body>
+<div id="cesiumContainer"></div>
+<script>
+    var viewer;
+    function onload(Cesium) {
+
+        var url = 'http://{s}.tianditu.com/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=img&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801';
+        viewer = new Cesium.Viewer('cesiumContainer', {
+            imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
+                url: url,
+                layer: 'img',
+                style: 'default',
+                format: 'tiles',
+                tileMatrixSetID: 'w',
+                credit: new Cesium.Credit('天地图全球影像服务'),
+                subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7'],
+                maximumLevel: 18
+            }),
+            baseLayerPicker: false,
+            selectionIndicator: false,
+            infoBox: false,
+            animation: false, // 动画
+            timeline: false, // 时间线
+            navigationHelpButton: false, // 关闭帮助控件
+            fullscreenButton: false, // 关闭全屏显示
+            geocoder : false // 关闭搜索控件
+        });
+
+        viewer._cesiumWidget._creditContainer.style.display = "none"; // 去除水印
+        viewer.scene.globe.enableLighting = false; // 关闭日照
+        viewer.scene.globe.depthTestAgainstTerrain = true; // 开启地形探测(地形之下的不可见)
+        viewer.scene.globe.showGroundAtmosphere = false; // 关闭大气层
+        var imageryLayers = viewer.imageryLayers;
+
+        var url2 = 'http://{s}.tianditu.com/cia_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={TileMatrix}&layer=cia&style={style}&tilerow={TileRow}&tilecol={TileCol}&tilematrixset={TileMatrixSet}&format=tiles&tk=fb0dd2b4158b2f9d4bec0aaaf9722801';
+        var labelImagery = new Cesium.WebMapTileServiceImageryProvider({
+            url: url2,
+            layer: 'cia',
+            style: 'default',
+            format: 'tiles',
+            tileMatrixSetID: 'w',
+            credit: new Cesium.Credit('天地图全球影像中文注记服务'),
+            subdomains: ['t0', 't1', 't2', 't3', 't4', 't5', 't6', 't7']
+        });
+        imageryLayers.addImageryProvider(labelImagery);
+        var scene = viewer.scene;
+        var camera = viewer.scene.camera;
+
+        // 初始位置
+        var initViewLocation = {
+            destination : Cesium.Cartesian3.fromDegrees(112.951085, 28.148327, 1000),
+            duration : 0, // 旋转速度 数值越大越慢
+            orientation : { // 朝北向下俯视
+                heading : 5.857107801269642,
+                pitch : -0.02842342271796139, // 相机间距
+                roll : 0.0  // 相机滚动
+            }
+        }
+
+        $.get("../data/json/typhoonData.json", null, function(data){
+            console.log(data)
+            var typhoonName = "利奇马";
+            var result = [];
+            if (data.length > 0) {
+                for(let i = 0; i < data.length; i++){
+                    if(typhoonName===data[i].name){
+                        const points = data[i].points
+                        for(let p=0; p<points.length; p++){
+                            const d = {
+                                'FID' : points[p].time,
+                                'serial': p+1,
+                                'fLongitude': points[p].lng,
+                                'fLatitude': points[p].lat
+                            }
+                            result.push(d);
+                        }
+                    }
+                }
+                typhoonFlytoPath(viewer, result, typhoonName)
+            }
+        })
+    }
+
+    function typhoonFlytoPath(viewer, positions, typhoonName){
+        // 允许飞行动画
+        viewer.clock.shouldAnimate = true;
+        // 设定模拟时间的界限
+        const start = Cesium.JulianDate.fromDate(new Date(2015, 2, 25, 16));
+        const stop = Cesium.JulianDate.addSeconds(start, positions.length, new Cesium.JulianDate());
+
+        viewer.clock.startTime = start.clone();
+        viewer.clock.stopTime = stop.clone();
+        viewer.clock.currentTime = start.clone();
+        viewer.clock.clockRange = Cesium.ClockRange.LOOP_STOP; //末尾循环
+        // 飞行速度，值越大速度越快，multiplier为0停止移动
+        viewer.clock.multiplier = 3;
+        // viewer.timeline.zoomTo(start, stop);
+
+        // 计算飞行时间和位置
+        const property = computeFlight(start, positions)
+
+        var rotation = Cesium.Math.toRadians(30);
+
+        function getRotationValue() {
+            rotation += -0.03;
+            return rotation;
+        }
+
+        const typhoonEntity = viewer.entities.add({
+            name : '台风路径',
+            availability : new Cesium.TimeIntervalCollection([new Cesium.TimeInterval({
+                start : start,
+                stop : stop
+            })]),
+            position : property,
+            orientation : new Cesium.VelocityOrientationProperty(property), // 根据位置移动自动计算方向
+            ellipse : {
+                semiMinorAxis : 35000.0,
+                semiMajorAxis : 35000.0,
+                height: 0.0,
+                fill: true,
+                outlineColor: Cesium.Color.RED,
+                outlineWidth: 5,
+                outline : false,
+                rotation: new Cesium.CallbackProperty(getRotationValue, false),
+                stRotation: new Cesium.CallbackProperty(getRotationValue, false),
+                material: new Cesium.ImageMaterialProperty({
+                    image: "../images/typhoon.gif",
+                    transparent: true
+                })
+            },
+            // model : {
+            //     uri : 'http://localhost:8080/f-15c_eagle/scene.gltf',
+            //     minimumPixelSize : 64
+            // },
+            point : {
+                pixelSize : 10,
+                color : Cesium.Color.TRANSPARENT,
+                outlineColor : Cesium.Color.YELLOW,
+                outlineWidth : 4
+            },
+            label : {
+                text: typhoonName,
+                font : '18px sans-serif',
+                pixelOffset : new Cesium.Cartesian2(0.0, 50)
+            },
+            path : {
+                resolution : 1,
+                material : new Cesium.PolylineGlowMaterialProperty({
+                    glowPower : 0.9,
+                    color : Cesium.Color.YELLOW
+                }),
+                width : 3
+            }
+        })
+
+        // 设置飞行视角
+        viewer.trackedEntity = undefined;
+        viewer.flyTo(typhoonEntity,{
+            duration: 2,
+            offset : {
+                heading : Cesium.Math.toRadians(0.0),
+                pitch : Cesium.Math.toRadians(-90),
+                range : 1500000
+            }
+        })
+        // 飞行视角追踪
+        var preUpdateHandler = function(){
+            if(typhoonEntity){
+                const center = typhoonEntity.position.getValue(viewer.clock.currentTime);
+                const hpr = new Cesium.HeadingPitchRange(Cesium.Math.toRadians(0.0), Cesium.Math.toRadians(-90), 1500000)
+                if(center){
+                    viewer.camera.lookAt(center, hpr)
+                }
+            }
+        }
+        viewer.scene.preUpdate.addEventListener(preUpdateHandler)
+        // viewer.zoomTo(typhoonEntity, new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-90), 15000));
+
+        // 设置插值函数为拉格朗日算法
+        typhoonEntity.position.setInterpolationOptions({
+            interpolationDegree : 3,
+            interpolationAlgorithm : Cesium.LagrangePolynomialApproximation
+        });
+    }
+
+    function computeFlight(start, positions){
+        const property = new Cesium.SampledPositionProperty();
+        for(let i=0; i<positions.length; i++){
+            const time = Cesium.JulianDate.addSeconds(start, i, new Cesium.JulianDate());
+            const position = Cesium.Cartesian3.fromDegrees(parseFloat(positions[i].fLongitude), parseFloat(positions[i].fLatitude), Cesium.Math.nextRandomNumber() * 500 + 1750);
+            property.addSample(time, position);
+        }
+        return property;
+    }
+</script>
+</body>
